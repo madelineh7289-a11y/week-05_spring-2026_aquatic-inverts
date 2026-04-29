@@ -1,0 +1,6 @@
+---
+title: "In_Class_Assignment"
+author: "Madeline Hulle"
+format: pdf
+---
+
