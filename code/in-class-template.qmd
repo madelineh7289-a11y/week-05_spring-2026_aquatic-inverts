@@ -1,0 +1,6 @@
+---
+title: "In-Class Template"
+author: "Madeline Hulle"
+format: pdf
+---
+
