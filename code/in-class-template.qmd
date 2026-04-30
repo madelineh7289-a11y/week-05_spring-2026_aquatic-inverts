@@ -86,6 +86,146 @@ ncos_sites <- sites |>
 
 ```
 
+## clean `taxn_list`
+
+Goal: convert chr strings in the existing `taxon_list` df into snakecase
+
+```{r}
+#| label: taxon-list-cleaning
+
+# creating new object from taxon_list
+taxon_list_clean <- taxon_list |> 
+  # coverted taxon names to snake case
+  mutate(verbatim_name = to_any_case(verbatim_name,
+                                     case = "snake"))
+
+
+
+
+```
+
+
+## clean `water_quality`
+
+Goal: to create a df with median pH, median DO (mg/L), median salinity (ppt) for each data and site
+
+- create new object from `water_quality`
+- clean column names
+- only include surveys from quarterly NCOS sites
+- create a new column called `date_site` to join with later data frames
+- group_by date_site
+- calculate median pH, salinity, and DO
+-ungroup data frame
+-filter out any outliers
+
+
+
+```{r}
+#| label: cleaning-water-quality
+
+# creatign new object from water_quality
+water_quality_clean <- water_quality |> 
+  # cleaning column name
+  clean_names() |> 
+  # a filtering join, only keep the rows in wq clean in which the site matches up with the site in ncos clean
+  semi_join(ncos_sites, by = "site") |> 
+  # creating new column to join with later data frames
+  unite("date_site", date, site, remove = TRUE) |> 
+  # grouping by date/site
+  group_by(date_site) |> 
+  # calculating the medians
+  summarize(med_pH = median(p_h, na.rm = TRUE),
+            med_sal = median(salinity_ppt, na.rm = TRUE),
+            med_do = median(dissolved_oxygen_mg_l, na.rm = TRUE)) |> 
+  # ungrouping df
+  ungroup() |> 
+  # filtering out outliers
+  filter(date_site != "2022-08-12_NVBR")
+
+
+
+```
+
+## clean `aq_ins`
+
+Goal: create a long format data frame (currently in wide format, like lots of other biological data sets) in which each row contains the counted indoviduals in each taxon during each survey. The data frame should include taxanomic information for each organism and the water quality information for each survey.
+
+*new df should have more rows*
+
+*functions in R expect long format*
+
+- create a new object from `aq_ins`
+- clean column names
+- filter tp only include quarterly NCOS sites
+- select columns
+- filter to only include "filtered beaker" sample
+- convert df to long format
+- group by ste date and taxon
+- calculate avg abundance per liter (sum counts divide dby 7.5 liters)
+- create a new column called `date_site`to join with water quality
+- join data frames
+- join with taxon lists
+
+```{r}
+#| label: cleaning_aquatic_insects
+
+
+aq_ins_clean <- aq_ins |> 
+  clean_names() |> 
+  semi_join(ncos_sites, by = "site") |> 
+  rename(date = date_on_vial) |> 
+  select(date, sample_type, site,
+         ostracod,
+         copepod,
+         hemiptera_corixidae_boatman,
+         cladocera,
+         nematode,
+         diptera_ceratopogonidae, 
+         annelida_oligochaete,
+         diptera_chironomid,
+         annelida_polychaete) |> 
+  filter(sample_type %in% c("FB 250", "FB250")) |> 
+  # converting to long format
+  pivot_longer(
+    # name the columns to make longer
+    cols = ostracod:annelida_polychaete,
+    # new column for old column names
+    # column names are all in new column called taxon
+    names_to = "taxon",
+    # new column for the values in each of the old columns
+    # counts now under a column called abundance
+    values_to = "abundance"
+  ) |> 
+  group_by(date, site, taxon) |> 
+  summarise(ave_lit = sum(abundance, na.rm = TRUE)/7.5) |> 
+  ungroup() |> 
+  unite("date_site", date, site, remove = FALSE) |> 
+  left_join(water_quality_clean, by = "date_site") |> 
+  left_join(taxon_list_clean, by = c("taxon" = "verbatim_name")) |> 
+  mutate(site_full = case_when(
+    site == "NVBR" ~ "North of Venoco Bridge",
+    site == "NEC" ~ "South of Venoco Bridge",
+    site == "NMC" ~ "Main Channel",
+    site == "NPB" ~ "South of Phelps Bridge",
+    site == "NPB1" ~ "North of Phelps Bridge",
+    site == "NPB2" ~ "Phelps Road",
+    site == "NWP" ~  "West Pond",
+    site == "NDC" ~ "Devereux Creek"
+  )) 
+  
+  
+  
+  
+  # wide to long, making missing values explicit
+
+
+
+
+
+
+
+```
+
 
 
 
