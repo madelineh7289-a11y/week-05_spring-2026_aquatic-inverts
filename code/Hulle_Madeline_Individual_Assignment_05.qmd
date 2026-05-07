@@ -61,7 +61,8 @@ sites <- read_xlsx(
 water_quality <- read_xlsx(
    here("data", "Aquatic Sampling Data-2026-03-10.xlsx"),
    sheet = "Water Quality",
-   # values in df that are actually indicating missing values, making it seem as a chr when it should be num
+   # values in df that are actually indicating missing values, 
+   # making it seem as a chr when it should be num
    # different ways missing values show up in data set
    na = c("over", "", "n/a", "N/A", "173+")
 )
@@ -110,7 +111,8 @@ taxon_list_clean <- taxon_list |>
 water_quality_clean <- water_quality |> 
   # cleaning column name
   clean_names() |> 
-  # a filtering join, only keep the rows in wq clean in which the site matches up with the site in ncos clean
+  # a filtering join, only keep the rows in wq clean in which the 
+  # site matches up with the site in ncos clean
   semi_join(ncos_sites, by = "site") |> 
   # creating new column to join with later data frames
   unite("date_site", date, site, remove = TRUE) |> 
@@ -154,7 +156,8 @@ aq_ins_clean <- aq_ins |>
          annelida_oligochaete,
          diptera_chironomid,
          annelida_polychaete) |> 
-  # filtered to only include filteres beaker samples (better sampling technique)
+  # filtered to only include filteres beaker samples 
+  # (better sampling technique)
   filter(sample_type %in% c("FB 250", "FB250")) |> 
   # converting to long format, making df longer 
   pivot_longer(
@@ -220,7 +223,8 @@ aq_ins_clean <- aq_ins |>
 ostracods <- aq_ins_clean |> 
   # filtering to only include ostracods
   filter(taxon == "ostracod") |> 
-  # log transforming `ave_lit` to overcome large difference in order of magnitude between observations
+  # log transforming `ave_lit` to overcome large difference in
+  # order of magnitude between observations
   mutate(log_ave_lit = log(ave_lit + 1))
 
 # taking a sample of 10 observations
