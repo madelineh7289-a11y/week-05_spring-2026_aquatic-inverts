@@ -276,7 +276,7 @@ copepod_plot <- ggplot(data = copepods,
                color = "blue",
                size = 2) +
   # wrappign x-axis labels
-  scale_x_discrete(labels = label_wrap(width = 15)) +
+  scale_x_discrete(labels = label_wrap(width = 10)) +
   # relabeling axes 
   labs(x = "Site",
        y = "log +1 transformed average abundance/L ",
@@ -336,7 +336,7 @@ ostracod_plot <- ggplot(data = ostracods,
        y = "Log +1 transformed average abundance/L",
        title = "NCOS Ostracod Abundance") +
   theme_bw() +
-  scale_x_discrete(labels = label_wrap(width = 15))
+  scale_x_discrete(labels = label_wrap(width = 10))
 
 ostracod_plot
 
@@ -346,8 +346,8 @@ ostracod_plot
 ### d. Create a Multi Panel Figure
 ```{r}
 #| label: multi-panel-viz
-#| fig-height: 6
-#| fig-width: 8
+#| fig-height: 8
+#| fig-width: 10
 
 
 salinity_plot / (copepod_plot | ostracod_plot)
