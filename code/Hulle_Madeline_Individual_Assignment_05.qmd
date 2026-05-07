@@ -1,0 +1,64 @@
+---
+title: "Assignment 5"
+author: "Madeline Hulle"
+format: pdf
+date: "2026-05-01"
+---
+
+# Set Up
+
+## Packages
+```{r}
+#| label: reading-packages
+
+# general use
+library("tidyverse")
+library("janitor")
+
+# file organization
+library("here")
+
+# data visualization
+library("wesanderson")
+
+```
+
+## Data
+```{r}
+#| label: reading-data
+
+# taxonomic information
+taxon_list <- read_csv(here("data", "taxon_list.csv"))
+
+#survey data (reading different sheets in as seperate data frames)
+
+aq_ins <- read_xlsx(
+  here("data", "Aquatic Sampling Data-2026-03-10.xlsx"),
+  sheet = "Aquatic Insects")
+
+# site information
+
+sites <- read_xlsx(
+  here("data", "Aquatic Sampling Data-2026-03-10.xlsx"),
+  sheet = "sites"
+)
+
+# water quaity
+
+water_quality <- read_xlsx(
+   here("data", "Aquatic Sampling Data-2026-03-10.xlsx"),
+   sheet = "Water Quality",
+   # values in df that are actually indicating missing values, making it seem as a chr when it should be num
+   # different ways missing values show up in data set
+   na = c("over", "", "n/a", "N/A", "173+")
+)
+
+```
+
+# Class Code
+
+
+
+
+
+
