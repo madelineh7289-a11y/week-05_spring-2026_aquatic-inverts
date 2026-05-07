@@ -201,8 +201,30 @@ aq_ins_clean <- aq_ins |>
 ``` 
 
 
+# Problems
+
+## 1. Visualizing differences across sites in major taxon abundance
+
+### a. Plan your figure
+
+- x-axis: `site_full`
+- y-axis: `ave_lit`
+- geometry to represent average abundance/L: geom_jitter()
+- geometry to represent medians: stat_summary(geom = "point", fun = median)
+
+### b. Wrangle your data
+```{r}
+#| label: ostracod-wrangling
+
+# creating a new object `ostracods` from `aq_ins_clean`
+ostracods <- aq_ins_clean |> 
+  # filtering to only include ostracods
+  filter(taxon == "ostracod")
 
 
+```
+
+### c. 
 
 
 
