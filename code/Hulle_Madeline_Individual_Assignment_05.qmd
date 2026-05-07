@@ -223,7 +223,7 @@ salinity_plot <- ggplot(data = aq_ins_clean,
   stat_summary(geom = "point",
                fun = median,
                color = "red",
-               size = 4) +
+               size = 3) +
   # adding line breaks to x axis labels (wrapping)
   scale_x_discrete(labels = label_wrap(width = 15)) +
   # relabeling axes and adding a title
@@ -274,12 +274,12 @@ copepod_plot <- ggplot(data = copepods,
   stat_summary(geom = "point",
                fun = median,
                color = "blue",
-               size = 2) +
+               size = 3) +
   # wrappign x-axis labels
   scale_x_discrete(labels = label_wrap(width = 10)) +
   # relabeling axes 
   labs(x = "Site",
-       y = "log +1 transformed average abundance/L ",
+       y = "Log +1 transformed average abundance/L ",
        title = "Copepod Abundance") +
   # using different theme
   theme_bw()
@@ -354,6 +354,11 @@ salinity_plot / (copepod_plot | ostracod_plot)
 
 ```
 
+### e. Interpret Your Figure
+
+- Between sites there does seem to be a difference between the median log + 1 average abundance/L of Copepods (blue dots) and that of Ostracods (pink dots). For sites North of Venoco Bridge and East Bridge, the median log + 1 average abundance/L of Ostracods is zero while for Copepods, this value is greater than zero, with East Channel being the site with the greatest median log + 1 average abundance/L of all of the sites. For the Main Channel site, Ostracod and Copepod median log + 1 average abundance/L are quite similar, both slightly above 0. The site South of Phelps Bridge also sees similar levels of median log + 1 average abundance/L across both groups, with this being the highest median log + 1 average abundance/L seen for the Ostracods. At North of Phelps Bridge we see low median log + 1 average abundance/L for both groups, with Ostracod having a slightly lower median log + 1 average abundance/L than Copepods. Finally, Phelps Road and Devereux Creek see similar relative median log + 1 average abundance/L values across the two groups, but it is higher for Copepods at both sites. Overall, there seems to be, on average, higher Copepod abundance across these 7 sites than Ostracod abundance as more of the blue (median log + 1 average abundance/L for Copepods) points are higher up on the y-axis than the pink ones (median log + 1 average abundance/L for Ostracods).
+
+- Comparing the Site Salinity plot to the Ostracod Abundance plot, there seems to be a possible relationship between the two. For site salinity, the mean salinity level is highest for North of Venoco Bridge and steadily decreases through the intermediate sites until the lowest median salinity is recorded at Devereux Creek. In the Ostracod Abundance plot, we see an almost inverse pattern where North of Venoco Bridge and East Channel see the lower median log + 1 average abundance/L levels and this steadily increases (with the exception of the South of Phelps Bridge observation) along the intermediate sites and reaching a peak at Devereux creek. More data would need to be collected and more analysis be done to determien if this is a true relationship and if the South of Phelps Bridge observation is a fluke) or if these inverse shapes are a coincidence in the data. From my visualization now however, it seems possible that higher salinity corresponds with a lower abundance of Ostracods and a lower salinity corresponds to a higher abundance of Ostracods. The optimal environmental conditions of Ostracods would also be helpful information to determine the validity of this relationship.
 
 
 
