@@ -2,6 +2,9 @@
 title: "In-Class Template"
 author: "Madeline Hulle"
 format: pdf
+execute: 
+  message: false
+  warning: false
 ---
 
 # 1. Set Up
@@ -256,17 +259,30 @@ Missing values for salinity, pH, and DO might influence later figures
 
 ```{r}
 #| label: salinity-plot
+#| fig-height: 6
+#| fig-width: 8
 
 # creating new objcect to store plot 
 salinity_plot <- ggplot(data = aq_ins_clean,
                         mapping = aes(x = site_full,
                                       y = med_sal)) +
   # points representing median salinity at each survey                        
-  geom_jitter(height = 0) +
+  geom_jitter(height = 0,
+              width = 0.1,
+              shape = 21) +
+  # points representing mean salinity
   stat_summary(geom = "point",
                fun = median,
                color = "red",
-               size = 2)
+               size = 4) +
+  # adding line breaks to x axis labels (wrapping)
+  scale_x_discrete(labels = label_wrap(width = 15)) +
+  # relabeling axes and adding a title
+  labs(x = "Site",
+       y = "Median Salinity (ppt)",
+       title = "Site Salinity") +
+  # adding themeing
+  theme_bw()
 
 # visualizing the object
 salinity_plot
@@ -274,6 +290,79 @@ salinity_plot
 ```
 
 Sites seem to differ in salinity. North of Venoco bridge, East Channel, and Main Channel tend to be hyper-saline while North of Phelps Bridge, Phelps Road, and Deveroux Creek is the least saline. South of Phelps bridge tends to be more freash water but it higher in salinity than the other, lower salinity sites
+
+
+## Visualize differences in copepod abundance
+
+- x-axis: site_full
+- y-axis: average_abundance_l
+- geometry to represent observations: geom_jitter
+- geometry to represent medians: stat_summary
+
+### Initial Cleaning
+
+```{r}
+#| label: copepod-cleaning
+
+copepods <- aq_ins_clean |> 
+  filter(taxon == "copepod") |> 
+  # adding 1 bc some observations are 0
+  # helps overcome issues with large differences in order of magnitude
+  mutate(log_ave_lit = log(ave_lit + 1))
+
+
+
+
+```
+
+### Visualizing
+```{r}
+#| label: copepod-plot
+#| fig-height: 6
+#| fig-width: 8
+
+# creating object to store plot
+copepod_plot <- ggplot(data = copepods,
+                       mapping = aes(x = site_full,
+                                     # using log transformed count per liter
+                                     y = log_ave_lit)) +
+  # jitter to represent each sample
+  geom_jitter(height = 0,
+              width = 0.1,
+              shape = 21) +
+  # points to represent median copepod abundance
+  stat_summary(geom = "point",
+               fun = median,
+               color = "blue",
+               size = 2) +
+  # wrappign x-axis labels
+  scale_x_discrete(labels = label_wrap(width = 15)) +
+  # relabeling axes 
+  labs(x = "Site",
+       y = "log +1 transformed average abundance/L ",
+       title = "Copepod Abundance") +
+  # using different theme
+  theme_bw()
+
+# displaying the object
+copepod_plot
+
+
+```
+
+Copepod abundance differs across sites. Main Channel, North of Phelps tend to be low N of Venoco bridge east channel,...
+
+## Putting Salinity and Copepod abundance together
+
+```{r}
+#| label: multi-panel
+#| fig-height: 6
+#| fig-width: 8
+
+salinity_plot / copepod_plot
+
+
+```
 
 
 
