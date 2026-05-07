@@ -36,3 +36,5 @@ library(patchwork)
 The rendered key for the code in this repository is here (add link when ready).
 
 The rendered document from class is here (add link when ready).
+
+The rendered document assignment PDF [View PDF](https://github.com/madelineh7289-a11y/week-05_spring-2026_aquatic-inverts/blob/main/code/Hulle_Madeline_Individual_Assignment_05.pdf)
