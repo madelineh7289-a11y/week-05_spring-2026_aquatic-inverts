@@ -14,15 +14,25 @@ execute:
 ```{r}
 #| label: reading-packages
 
-# general use
-library("tidyverse")
-library("janitor")
+# general use and cleaning
 
-# file organization
-library("here")
+library(tidyverse)
+library(here)
+library(janitor)
+library(snakecase)
 
-# data visualization
-library("wesanderson")
+# wrap axis labels
+library(scales)
+
+# reading in .xlsx files
+library(readxl)
+
+# visualize missing data
+library(naniar)
+
+# arrange plots
+library(patchwork)
+
 
 ```
 
