@@ -71,9 +71,9 @@ water_quality <- read_xlsx(
 
 # Class Code
 
-# 2. Cleaning
+## 2. Cleaning
 
-## `sites` object
+### `sites` object
 
 ```{r}
 #| label: cleaning-sites
@@ -86,7 +86,7 @@ ncos_sites <- sites |>
 
 ```
 
-## clean `taxon_list`
+### clean `taxon_list`
 
 
 ```{r}
@@ -102,7 +102,7 @@ taxon_list_clean <- taxon_list |>
 ```
 
 
-## clean `water_quality`
+### clean `water_quality`
 
 ```{r}
 #| label: cleaning-water-quality
@@ -131,7 +131,7 @@ water_quality_clean <- water_quality |>
 
 ```
 
-## clean `aq_ins`
+### clean `aq_ins`
 
 ```{r}
 #| label: cleaning_aquatic_insects
@@ -203,6 +203,90 @@ aq_ins_clean <- aq_ins |>
 
 ``` 
 
+## Visualizing
+
+### Salinity
+```{r}
+#| label: salinity-plot
+#| fig-height: 6
+#| fig-width: 8
+
+# creating new objcect to store plot 
+salinity_plot <- ggplot(data = aq_ins_clean,
+                        mapping = aes(x = site_full,
+                                      y = med_sal)) +
+  # points representing median salinity at each survey                        
+  geom_jitter(height = 0,
+              width = 0.1,
+              shape = 21) +
+  # points representing mean salinity
+  stat_summary(geom = "point",
+               fun = median,
+               color = "red",
+               size = 4) +
+  # adding line breaks to x axis labels (wrapping)
+  scale_x_discrete(labels = label_wrap(width = 15)) +
+  # relabeling axes and adding a title
+  labs(x = "Site",
+       y = "Median Salinity (ppt)",
+       title = "Site Salinity") +
+  # adding themeing
+  theme_bw()
+
+# visualizing the object
+salinity_plot
+
+```
+
+### Copepod Abundance
+
+#### Cleaning
+```{r}
+#| label: copepod-cleaning
+
+copepods <- aq_ins_clean |> 
+  filter(taxon == "copepod") |> 
+  # adding 1 bc some observations are 0
+  # helps overcome issues with large differences in order of magnitude
+  mutate(log_ave_lit = log(ave_lit + 1))
+
+
+
+
+```
+
+#### Copepod Viz
+```{r}
+#| label: copepod-plot
+#| fig-height: 6
+#| fig-width: 8
+
+# creating object to store plot
+copepod_plot <- ggplot(data = copepods,
+                       mapping = aes(x = site_full,
+                                     # using log transformed count per liter
+                                     y = log_ave_lit)) +
+  # jitter to represent each sample
+  geom_jitter(height = 0,
+              width = 0.1,
+              shape = 21) +
+  # points to represent median copepod abundance
+  stat_summary(geom = "point",
+               fun = median,
+               color = "blue",
+               size = 2) +
+  # wrappign x-axis labels
+  scale_x_discrete(labels = label_wrap(width = 15)) +
+  # relabeling axes 
+  labs(x = "Site",
+       y = "log +1 transformed average abundance/L ",
+       title = "Copepod Abundance") +
+  # using different theme
+  theme_bw()
+
+# displaying the object
+copepod_plot
+```
 
 # Problems
 
@@ -256,11 +340,19 @@ ostracod_plot <- ggplot(data = ostracods,
 
 ostracod_plot
 
-
-
 ```
 
 
+### d. Create a Multi Panel Figure
+```{r}
+#| label: multi-panel-viz
+#| fig-height: 6
+#| fig-width: 8
+
+
+salinity_plot / (copepod_plot | ostracod_plot)
+
+```
 
 
 
