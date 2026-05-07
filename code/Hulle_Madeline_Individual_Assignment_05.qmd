@@ -208,7 +208,7 @@ aq_ins_clean <- aq_ins |>
 ### a. Plan your figure
 
 - x-axis: `site_full`
-- y-axis: `ave_lit`
+- y-axis: `log_ave_lit` (updated w/ `log_ave_lit` after viz)
 - geometry to represent average abundance/L: geom_jitter()
 - geometry to represent medians: stat_summary(geom = "point", fun = median)
 
@@ -219,12 +219,43 @@ aq_ins_clean <- aq_ins |>
 # creating a new object `ostracods` from `aq_ins_clean`
 ostracods <- aq_ins_clean |> 
   # filtering to only include ostracods
-  filter(taxon == "ostracod")
+  filter(taxon == "ostracod") |> 
+  # log transforming `ave_lit` to overcome large difference in order of magnitude between observations
+  mutate(log_ave_lit = log(ave_lit + 1))
+
+# taking a sample of 10 observations
+slice_sample(ostracods, n = 10)
+
+```
+
+### c. Code Your Figure
+```{r}
+#| label: ostracod-viz
+#| fig-height: 6
+#| fig-width: 8
+
+ostracod_plot <- ggplot(data = ostracods,
+                        mapping = aes(x = site_full,
+                                      y = log_ave_lit)) +
+  geom_jitter(height = 0,
+              width = 0.2,
+              shape = 21) +
+  stat_summary(geom = "point",
+               fun = median,
+               color = "hotpink",
+               size = 3) +
+  labs(x = "Site",
+       y = "Log +1 transformed average abundance/L",
+       title = "NCOS Ostracod Abundance") +
+  theme_bw() +
+  scale_x_discrete(labels = label_wrap(width = 15))
+
+ostracod_plot
+
 
 
 ```
 
-### c. 
 
 
 
