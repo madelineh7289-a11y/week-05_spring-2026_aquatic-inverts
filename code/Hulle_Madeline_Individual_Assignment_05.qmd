@@ -1,8 +1,11 @@
 ---
-title: "Assignment 5"
+title: "Hulle_Madeline_Individual_Assignment_05"
 author: "Madeline Hulle"
 format: pdf
 date: "2026-05-01"
+execute: 
+  message: false
+  warning: false
 ---
 
 # Set Up
@@ -56,9 +59,4 @@ water_quality <- read_xlsx(
 ```
 
 # Class Code
-
-
-
-
-
 
