@@ -334,7 +334,7 @@ ostracod_plot <- ggplot(data = ostracods,
                size = 3) +
   labs(x = "Site",
        y = "Log +1 transformed average abundance/L",
-       title = "NCOS Ostracod Abundance") +
+       title = "Ostracod Abundance") +
   theme_bw() +
   scale_x_discrete(labels = label_wrap(width = 10))
 
