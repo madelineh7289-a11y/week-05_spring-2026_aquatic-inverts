@@ -372,7 +372,7 @@ salinity_plot / (copepod_plot | ostracod_plot)
 
 ### b. Wrangle Your Data
 ```{r}
-#| label: abundance-salinity-viz
+#| label: abundance-salinity-wrangle
 
 log_aq_ins_clean <- aq_ins_clean |> 
   mutate(log_ave_lit = log(ave_lit + 1)) |> 
@@ -383,6 +383,22 @@ log_aq_ins_clean <- aq_ins_clean |>
 
 ```
 
+### c. Code Your Figure
+```{r}
+#| label: abundance-salinity-viz
+
+log_abundance_salinity <- ggplot(data = log_aq_ins_clean,
+                                 mapping = aes(x = med_sal,
+                                               y = log_ave_lit,
+                                               color = taxon)) +
+  geom_jitter(height = 0) +
+  facet_wrap(~ taxon)
+
+log_abundance_salinity
+
+
+
+```
 
 
 
