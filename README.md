@@ -15,20 +15,32 @@ library(scales)
 library(readxl)
 library(naniar)
 library(patchwork)
+library(wesanderson)
 ```
 
 ## Data and file information
 
 ```
 .
-├── README.md
-├── code                                          
-│   ├── week-05_in-class-KEY.pdf                  # key (comes with repo)
+├── code
+│   ├── Hulle_Madeline_Individual_Assignment_05.pdf
+│   ├── Hulle_Madeline_Individual_Assignment_05.qmd
+│   ├── In_Class_Assignment.pdf
+│   ├── In_Class_Assignment.qmd
+│   ├── in-class-rendered.pdf
+│   ├── in-class-template.pdf
+│   ├── in-class-template.qmd
+│   ├── week-05_in-class-KEY.pdf
 │   └── week-05_in-class-KEY.qmd
 ├── data
-│   ├── Aquatic Sampling Data-2026-03-10.xlsx     # invertebrate survey data
-│   └── taxon_list.csv                            # taxonomic information
+│   ├── Aquatic Sampling Data-2026-03-10.xlsx
+│   └── taxon_list.csv
+├── index.html
+├── README.md
 └── week-05_spring-2026_aquatic-inverts.Rproj
+
+3 directories, 14 files
+
 ```
 
 ## Rendered output
