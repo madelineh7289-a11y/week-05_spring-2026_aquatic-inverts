@@ -2,7 +2,7 @@
 title: "Hulle_Madeline_Individual_Assignment_05"
 author: "Madeline Hulle"
 format: pdf
-date: "2026-05-01"
+date: "2026-05-09"
 execute: 
   message: false
   warning: false
@@ -236,9 +236,6 @@ salinity_plot <- ggplot(data = aq_ins_clean,
   # adding themeing
   theme_bw()
 
-# visualizing the object
-salinity_plot
-
 ```
 
 ### Copepod Abundance
@@ -287,8 +284,6 @@ copepod_plot <- ggplot(data = copepods,
   # using different theme
   theme_bw()
 
-# displaying the object
-copepod_plot
 ```
 
 # Problems
@@ -398,12 +393,14 @@ slice_sample(ostracods, n = 10)
 ### c. Code Your Figure
 ```{r}
 #| label: abundance-salinity-viz
+#| fig-height: 6
+#| fig-width: 8
 
 # creating a new object to store plot from the data `log_aq_ins_clean
 log_abundance_salinity <- ggplot(data = log_aq_ins_clean,
                                  # x-axis: median salinity
+                                 # y-axis: log transformed average abundance/L
                                  mapping = aes(x = med_sal,
-                                               # y-axis: log transformed average abundance/L
                                                y = log_ave_lit,
                                                # coloring by taxon
                                                color = taxon)) +
@@ -413,7 +410,8 @@ log_abundance_salinity <- ggplot(data = log_aq_ins_clean,
   facet_wrap(~ taxon,
              scales = "free") +
   # adding in custom coloring
-  scale_color_manual(values = wes_palette("GrandBudapest2", n = 9, type = "continuous")) +
+  scale_color_manual(values = wes_palette("GrandBudapest2",
+                                          n = 9, type = "continuous")) +
   # custom theme
   theme_bw() +
   # taking out legend, redundant
