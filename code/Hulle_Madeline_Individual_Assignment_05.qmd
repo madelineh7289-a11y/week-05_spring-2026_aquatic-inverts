@@ -33,6 +33,9 @@ library(naniar)
 # arrange plots
 library(patchwork)
 
+# coloring
+library("wesanderson")
+
 
 ```
 
@@ -333,7 +336,7 @@ ostracod_plot <- ggplot(data = ostracods,
                color = "hotpink",
                size = 3) +
   labs(x = "Site",
-       y = "Log +1 transformed average abundance/L",
+       y = "Log +1 Transformed Average Abundance/Liter",
        title = "Ostracod Abundance") +
   theme_bw() +
   scale_x_discrete(labels = label_wrap(width = 10))
@@ -374,12 +377,21 @@ salinity_plot / (copepod_plot | ostracod_plot)
 ```{r}
 #| label: abundance-salinity-wrangle
 
+# creating a new object `log_aq_ins_clean` from `aq_ins_clean`
 log_aq_ins_clean <- aq_ins_clean |> 
+  # log transforming the `ave_lit` column
   mutate(log_ave_lit = log(ave_lit + 1)) |> 
+  # turnign each taxon into title case
   mutate(taxon = to_any_case(taxon,
                              case = "title")) |> 
-  mutate(taxon  = fct_reorder(taxon,
-                              ave_lit))
+  # reordering the levels of taxon by the max abundance
+  mutate(taxon  = fct_rev(fct_reorder(taxon,
+                              ave_lit,
+                              .fun = max,
+                              na.rm = TRUE)))
+
+# taking a sample of 10 observations
+slice_sample(ostracods, n = 10)
 
 ```
 
@@ -387,19 +399,38 @@ log_aq_ins_clean <- aq_ins_clean |>
 ```{r}
 #| label: abundance-salinity-viz
 
+# creating a new object to store plot from the data `log_aq_ins_clean
 log_abundance_salinity <- ggplot(data = log_aq_ins_clean,
+                                 # x-axis: median salinity
                                  mapping = aes(x = med_sal,
+                                               # y-axis: log transformed average abundance/L
                                                y = log_ave_lit,
+                                               # coloring by taxon
                                                color = taxon)) +
+  # points representing median salinity 
   geom_jitter(height = 0) +
-  facet_wrap(~ taxon)
+  # plot for each taxon with own y-axis 
+  facet_wrap(~ taxon,
+             scales = "free") +
+  # adding in custom coloring
+  scale_color_manual(values = wes_palette("GrandBudapest2", n = 9, type = "continuous")) +
+  # custom theme
+  theme_bw() +
+  # taking out legend, redundant
+  theme(legend.position = "none") +
+  # labeling x and y axes 
+  labs(x = "Median Salinity (ppt)",
+       y = "Log + 1 Transformed Average Abundance/Liter",
+       # adding a title
+       title = "Abundance as a Function of Salinity")
 
+# displaying the plot
 log_abundance_salinity
-
-
 
 ```
 
+### d. Interpret Your Figure
 
+Ostracod, Copepod, and Cladocera show the highest log-transformed abundances overall (y-axes reaching 6–7), and all three display a clear negative relationship with salinity as observations cluster heavily at low salinity (0–10 ppt) with higher abundance values, a pattern that decreases with increased salinity values. Hemiptera Corixidae Boatman follows a similar pattern of low-salinity concentration but at much lower maximum abundances (~4). The annelid taxa (Polychaete and Oligochaete) and the dipteran taxa (Chironomid and Ceratopogonidae) are present across the full salinity range (0–70 ppt), suggesting stronger salinity tolerance, though their abundances remain consistently low regardless of salinity. Nematode stands out as the taxon with the lowest maximum abundance of all nine (~0.25), with observations scattered across salinity levels and no discernible trend. Overall, most taxa appear to prefer low-salinity conditions, but the top three taxa, Ostracod, Copepod, Cladocera, show this preference most dramatically in both abundance magnitude and distributional pattern.
 
 
