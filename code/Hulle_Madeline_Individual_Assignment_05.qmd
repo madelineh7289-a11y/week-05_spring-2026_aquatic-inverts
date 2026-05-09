@@ -34,7 +34,7 @@ library(naniar)
 library(patchwork)
 
 # coloring
-library("wesanderson")
+library(wesanderson)
 
 
 ```
@@ -366,7 +366,7 @@ salinity_plot / (copepod_plot | ostracod_plot)
 - y-axis: `log_ave_lit`
 - color: taxon
 - geometry: geom_jitter()
-- facets: facet_wrap(~taxon)
+- facets: facet_wrap(~taxon, scales = "free")
 
 ### b. Wrangle Your Data
 ```{r}
